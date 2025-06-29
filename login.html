@@ -6,8 +6,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       background: #eef2f7;
+      text-align: center;
       padding-top: 100px;
     }
     input {
@@ -20,6 +20,7 @@
       background: #4CAF50;
       color: white;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
     .box {
@@ -41,7 +42,7 @@
   </div>
 
   <script>
-    // Temporary setup: default user
+    // Temporary default user
     if (!localStorage.getItem("workmaker_user")) {
       localStorage.setItem("workmaker_user", JSON.stringify({
         username: "admin",
