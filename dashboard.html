@@ -20,6 +20,7 @@
     }
     h2 {
       color: #2c3e50;
+      margin-bottom: 10px;
     }
     p {
       color: #555;
@@ -53,11 +54,18 @@
     .btn.logout:hover {
       background-color: #b71c1c;
     }
+    .welcome {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #444;
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <h2>Welcome to Workmaker Dashboard</h2>
+    <div class="welcome" id="welcomeMsg">Welcome!</div>
+    <h2>Workmaker Dashboard</h2>
     <p>You are now logged in.</p>
 
     <div class="button-group">
@@ -67,6 +75,12 @@
   </div>
 
   <script>
+    // Show logged-in username
+    const user = JSON.parse(localStorage.getItem("workmaker_user"));
+    if (user && user.username) {
+      document.getElementById("welcomeMsg").innerText = "Welcome, " + user.username + "!";
+    }
+
     function logout() {
       window.location.href = "login.html";
     }
