@@ -12,26 +12,46 @@
     }
     .card {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
       display: inline-block;
-      margin-top: 50px;
+      max-width: 500px;
     }
     h2 {
-      color: #333;
+      color: #2c3e50;
     }
     p {
       color: #555;
+      margin-bottom: 30px;
     }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #e53935;
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .button-group a,
+    .button-group button {
+      text-decoration: none;
+    }
+    .btn {
+      padding: 12px 20px;
+      background-color: #4CAF50;
       color: white;
+      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background-color: #388e3c;
+    }
+    .btn.logout {
+      background-color: #d32f2f;
+    }
+    .btn.logout:hover {
+      background-color: #b71c1c;
     }
   </style>
 </head>
@@ -39,7 +59,11 @@
   <div class="card">
     <h2>Welcome to Workmaker Dashboard</h2>
     <p>You are now logged in.</p>
-    <button onclick="logout()">Logout</button>
+
+    <div class="button-group">
+      <a href="loadsecurity.html"><button class="btn">Go to Load Security Calculator</button></a>
+      <button class="btn logout" onclick="logout()">Logout</button>
+    </div>
   </div>
 
   <script>
