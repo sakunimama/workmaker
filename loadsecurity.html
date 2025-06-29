@@ -22,7 +22,8 @@
       display: inline-block;
       border-radius: 10px;
       text-align: left;
-      max-width: 400px;
+      max-width: 450px;
+      font-size: 16px;
     }
     .buttons {
       margin-top: 15px;
@@ -31,6 +32,11 @@
       padding: 10px 15px;
       margin: 5px;
       cursor: pointer;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #bbb;
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -41,10 +47,10 @@
   <input type="number" id="load" placeholder="e.g. 10"><br>
 
   <label>EC Rate (₹/unit):</label><br>
-  <input type="number" id="ecRate" step="0.01" value="6"><br>
+  <input type="number" id="ecRate" step="0.01" placeholder="e.g. 6"><br>
 
   <label>FC Rate (₹/kW or kVA):</label><br>
-  <input type="number" id="fcRate" step="0.01" value="70"><br>
+  <input type="number" id="fcRate" step="0.01" placeholder="e.g. 70"><br>
 
   <input type="checkbox" id="isKVA">
   <label for="isKVA">FC is per kVA</label><br>
@@ -64,7 +70,7 @@
       const fcRate = parseFloat(document.getElementById('fcRate').value);
       const isKVA = document.getElementById('isKVA').checked;
 
-      const AU = 100;
+      const AU = 100; // Assessed units per kW
 
       if (isNaN(load) || isNaN(ecRate) || isNaN(fcRate)) {
         document.getElementById('result').innerHTML = "Please fill all values correctly.";
@@ -76,10 +82,13 @@
       const ls = 1.5 * (ec + fc);
 
       const breakdown = `
-        <strong>Energy Charge (EC):</strong> ₹${ec.toFixed(2)}<br>
-        <strong>Fixed Charge (FC):</strong> ₹${fc.toFixed(2)}<br><br>
-        <strong>Load Security = 1.5 × (EC + FC)</strong><br>
-        <strong>= 1.5 × (${ec.toFixed(2)} + ${fc.toFixed(2)})</strong><br>
+        <strong>Load:</strong> ${load.toFixed(2)} kW<br>
+        <strong>Assessed Units (AU):</strong> ${AU} units/kW<br>
+        <strong>Energy Charge:</strong> ₹${ec.toFixed(2)}<br>
+        <strong>Fixed Charge:</strong> ₹${fc.toFixed(2)}<br>
+        <hr>
+        <strong>Load Security = 1.5 × (Energy Charge + Fixed Charge)</strong><br>
+        = 1.5 × (${ec.toFixed(2)} + ${fc.toFixed(2)})<br>
         <strong>= ₹${ls.toFixed(2)}</strong>
       `;
 
@@ -98,8 +107,8 @@
 
     function clearFields() {
       document.getElementById('load').value = "";
-      document.getElementById('ecRate').value = "6";
-      document.getElementById('fcRate').value = "70";
+      document.getElementById('ecRate').value = "";
+      document.getElementById('fcRate').value = "";
       document.getElementById('isKVA').checked = false;
       document.getElementById('result').innerHTML = "";
     }
