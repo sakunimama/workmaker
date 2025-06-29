@@ -4,64 +4,127 @@
   <meta charset="UTF-8">
   <title>Load Security - Workmaker</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fa;
-      padding: 40px;
+      font-family: 'Inter', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
       text-align: center;
     }
-    input, label {
-      margin: 10px;
-      padding: 10px;
+
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 20px;
     }
-    .output {
-      margin-top: 20px;
-      padding: 15px;
-      background: #e1f5fe;
-      display: inline-block;
-      border-radius: 10px;
-      text-align: left;
-      max-width: 450px;
+
+    input[type="number"],
+    input[type="checkbox"],
+    label {
       font-size: 16px;
     }
+
+    input[type="number"] {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 10px;
+    }
+
     .buttons {
-      margin-top: 15px;
+      margin-top: 20px;
     }
+
     button {
-      padding: 10px 15px;
+      padding: 10px 18px;
       margin: 5px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
+      transition: 0.3s;
     }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .output {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f9f9fb;
+      border-left: 5px solid #4CAF50;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .output strong {
+      color: #2c3e50;
+    }
+
+    .highlight {
+      font-size: 18px;
+      color: #d32f2f;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
     hr {
       border: none;
-      border-top: 1px solid #bbb;
+      border-top: 1px solid #ddd;
       margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <h2>Load Security Calculator</h2>
+  <div class="card">
+    <h2>Load Security Calculator</h2>
 
-  <label>Load (kW):</label><br>
-  <input type="number" id="load" placeholder="e.g. 10"><br>
+    <label for="load">Load (kW):</label>
+    <input type="number" id="load" placeholder="e.g. 10">
 
-  <label>EC Rate (₹/unit):</label><br>
-  <input type="number" id="ecRate" step="0.01" placeholder="e.g. 6"><br>
+    <label for="ecRate">EC Rate (₹/unit):</label>
+    <input type="number" id="ecRate" step="0.01" placeholder="e.g. 6">
 
-  <label>FC Rate (₹/kW or kVA):</label><br>
-  <input type="number" id="fcRate" step="0.01" placeholder="e.g. 70"><br>
+    <label for="fcRate">FC Rate (₹/kW or kVA):</label>
+    <input type="number" id="fcRate" step="0.01" placeholder="e.g. 70">
 
-  <input type="checkbox" id="isKVA">
-  <label for="isKVA">FC is per kVA</label><br>
+    <label><input type="checkbox" id="isKVA"> FC is per kVA</label>
 
-  <div class="buttons">
-    <button onclick="calculateLS()">Calculate</button>
-    <button onclick="exportPDF()">Download PDF</button>
-    <button onclick="clearFields()">Clear</button>
+    <div class="buttons">
+      <button onclick="calculateLS()">Calculate</button>
+      <button onclick="exportPDF()">Download PDF</button>
+      <button onclick="clearFields()">Clear</button>
+    </div>
+
+    <div class="output" id="result"></div>
   </div>
-
-  <div class="output" id="result"></div>
 
   <script>
     function calculateLS() {
@@ -70,10 +133,10 @@
       const fcRate = parseFloat(document.getElementById('fcRate').value);
       const isKVA = document.getElementById('isKVA').checked;
 
-      const AU = 100; // Assessed units per kW
+      const AU = 100;
 
       if (isNaN(load) || isNaN(ecRate) || isNaN(fcRate)) {
-        document.getElementById('result').innerHTML = "Please fill all values correctly.";
+        document.getElementById('result').innerHTML = "⚠️ Please fill all values correctly.";
         return;
       }
 
@@ -83,13 +146,13 @@
 
       const breakdown = `
         <strong>Load:</strong> ${load.toFixed(2)} kW<br>
-        <strong>Assessed Units (AU):</strong> ${AU} units/kW<br>
+        <strong>Assessed Units:</strong> ${AU} units/kW<br>
         <strong>Energy Charge:</strong> ₹${ec.toFixed(2)}<br>
         <strong>Fixed Charge:</strong> ₹${fc.toFixed(2)}<br>
         <hr>
-        <strong>Load Security = 1.5 × (Energy Charge + Fixed Charge)</strong><br>
+        <strong>Load Security = 1.5 × (EC + FC)</strong><br>
         = 1.5 × (${ec.toFixed(2)} + ${fc.toFixed(2)})<br>
-        <strong>= ₹${ls.toFixed(2)}</strong>
+        <span class="highlight">= ₹${ls.toFixed(2)}</span>
       `;
 
       document.getElementById('result').innerHTML = breakdown;
