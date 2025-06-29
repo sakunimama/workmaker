@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Workmaker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #eef2f7;
+      padding-top: 100px;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login to Workmaker</h2>
+    <input type="text" id="username" placeholder="Username" /><br>
+    <input type="password" id="password" placeholder="Password" /><br>
+    <button onclick="login()">Login</button>
+    <p id="message" style="color:red;"></p>
+  </div>
+
+  <script>
+    // Temporary setup: default user
+    if (!localStorage.getItem("workmaker_user")) {
+      localStorage.setItem("workmaker_user", JSON.stringify({
+        username: "admin",
+        password: "1234"
+      }));
+    }
+
+    function login() {
+      const inputUser = document.getElementById("username").value;
+      const inputPass = document.getElementById("password").value;
+      const savedUser = JSON.parse(localStorage.getItem("workmaker_user"));
+
+      if (inputUser === savedUser.username && inputPass === savedUser.password) {
+        window.location.href = "dashboard.html";
+      } else {
+        document.getElementById("message").innerText = "Invalid username or password!";
+      }
+    }
+  </script>
+</body>
+</html>
