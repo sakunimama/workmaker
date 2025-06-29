@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Load Security - Workmaker</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,10 +22,15 @@
       display: inline-block;
       border-radius: 10px;
       text-align: left;
+      max-width: 400px;
     }
-    .output strong {
-      display: block;
-      margin-bottom: 8px;
+    .buttons {
+      margin-top: 15px;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -43,7 +49,11 @@
   <input type="checkbox" id="isKVA">
   <label for="isKVA">FC is per kVA</label><br>
 
-  <button onclick="calculateLS()">Calculate</button>
+  <div class="buttons">
+    <button onclick="calculateLS()">Calculate</button>
+    <button onclick="exportPDF()">Download PDF</button>
+    <button onclick="clearFields()">Clear</button>
+  </div>
 
   <div class="output" id="result"></div>
 
@@ -54,7 +64,7 @@
       const fcRate = parseFloat(document.getElementById('fcRate').value);
       const isKVA = document.getElementById('isKVA').checked;
 
-      const AU = 100; // Assessed Units per kW
+      const AU = 100;
 
       if (isNaN(load) || isNaN(ecRate) || isNaN(fcRate)) {
         document.getElementById('result').innerHTML = "Please fill all values correctly.";
@@ -74,6 +84,24 @@
       `;
 
       document.getElementById('result').innerHTML = breakdown;
+    }
+
+    function exportPDF() {
+      const resultElement = document.getElementById('result');
+      if (resultElement.innerText.trim() === "") {
+        alert("Please calculate Load Security before downloading.");
+        return;
+      }
+
+      html2pdf().from(resultElement).save('Load_Security.pdf');
+    }
+
+    function clearFields() {
+      document.getElementById('load').value = "";
+      document.getElementById('ecRate').value = "6";
+      document.getElementById('fcRate').value = "70";
+      document.getElementById('isKVA').checked = false;
+      document.getElementById('result').innerHTML = "";
     }
   </script>
 </body>
