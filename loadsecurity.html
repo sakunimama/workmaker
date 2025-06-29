@@ -20,6 +20,11 @@
       background: #e1f5fe;
       display: inline-block;
       border-radius: 10px;
+      text-align: left;
+    }
+    .output strong {
+      display: block;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -60,11 +65,15 @@
       const fc = isKVA ? (load / 0.85) * fcRate : load * fcRate;
       const ls = 1.5 * (ec + fc);
 
-      document.getElementById('result').innerHTML = `
+      const breakdown = `
         <strong>Energy Charge (EC):</strong> ₹${ec.toFixed(2)}<br>
-        <strong>Fixed Charge (FC):</strong> ₹${fc.toFixed(2)}<br>
-        <strong><u>Load Security (LS):</u></strong> ₹${ls.toFixed(2)}
+        <strong>Fixed Charge (FC):</strong> ₹${fc.toFixed(2)}<br><br>
+        <strong>Load Security = 1.5 × (EC + FC)</strong><br>
+        <strong>= 1.5 × (${ec.toFixed(2)} + ${fc.toFixed(2)})</strong><br>
+        <strong>= ₹${ls.toFixed(2)}</strong>
       `;
+
+      document.getElementById('result').innerHTML = breakdown;
     }
   </script>
 </body>
