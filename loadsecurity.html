@@ -158,15 +158,38 @@
       document.getElementById('result').innerHTML = breakdown;
     }
 
-    function exportPDF() {
-      const resultElement = document.getElementById('result');
-      if (resultElement.innerText.trim() === "") {
-        alert("Please calculate Load Security before downloading.");
-        return;
-      }
+   function exportPDF() {
+  const resultElement = document.getElementById('result');
+  if (resultElement.innerText.trim() === "") {
+    alert("Please calculate Load Security before downloading.");
+    return;
+  }
 
-      html2pdf().from(resultElement).save('Load_Security.pdf');
-    }
+  // Create a new container for the PDF content
+  const wrapper = document.createElement("div");
+  wrapper.style.fontFamily = 'Arial, sans-serif';
+  wrapper.style.fontSize = '14px';
+
+  // Create the header
+  const header = document.createElement("div");
+  header.innerHTML = `
+    <h2 style="text-align: center; margin-bottom: 20px;">
+      ⚡ Workmaker - Load Security Report
+    </h2>
+    <hr style="border: none; border-top: 1px solid #ccc;">
+  `;
+
+  // Clone the result content
+  const resultClone = resultElement.cloneNode(true);
+
+  // Combine header and result into wrapper
+  wrapper.appendChild(header);
+  wrapper.appendChild(resultClone);
+
+  // Export combined content to PDF
+  html2pdf().from(wrapper).save('Load_Security_Report.pdf');
+}
+
 
     function clearFields() {
       document.getElementById('load').value = "";
