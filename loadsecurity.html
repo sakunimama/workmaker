@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Load Security - Workmaker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fa;
+      padding: 40px;
+      text-align: center;
+    }
+    input, label {
+      margin: 10px;
+      padding: 10px;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e1f5fe;
+      display: inline-block;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Load Security Calculator</h2>
+
+  <label>Load (kW):</label><br>
+  <input type="number" id="load" placeholder="e.g. 10"><br>
+
+  <label>EC Rate (₹/unit):</label><br>
+  <input type="number" id="ecRate" step="0.01" value="6"><br>
+
+  <label>FC Rate (₹/kW or kVA):</label><br>
+  <input type="number" id="fcRate" step="0.01" value="70"><br>
+
+  <input type="checkbox" id="isKVA">
+  <label for="isKVA">FC is per kVA</label><br>
+
+  <button onclick="calculateLS()">Calculate</button>
+
+  <div class="output" id="result"></div>
+
+  <script>
+    function calculateLS() {
+      const load = parseFloat(document.getElementById('load').value);
+      const ecRate = parseFloat(document.getElementById('ecRate').value);
+      const fcRate = parseFloat(document.getElementById('fcRate').value);
+      const isKVA = document.getElementById('isKVA').checked;
+
+      const AU = 100; // Assessed Units per kW
+
+      if (isNaN(load) || isNaN(ecRate) || isNaN(fcRate)) {
+        document.getElementById('result').innerHTML = "Please fill all values correctly.";
+        return;
+      }
+
+      const ec = AU * load * ecRate;
+      const fc = isKVA ? (load / 0.85) * fcRate : load * fcRate;
+      const ls = 1.5 * (ec + fc);
+
+      document.getElementById('result').innerHTML = `
+        <strong>Energy Charge (EC):</strong> ₹${ec.toFixed(2)}<br>
+        <strong>Fixed Charge (FC):</strong> ₹${fc.toFixed(2)}<br>
+        <strong><u>Load Security (LS):</u></strong> ₹${ls.toFixed(2)}
+      `;
+    }
+  </script>
+</body>
+</html>
