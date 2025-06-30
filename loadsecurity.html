@@ -122,10 +122,13 @@
     <label for="load">Load (kW):</label>
     <input type="number" id="load" placeholder="e.g. 10">
 
+    <label for="au">Assessed Units (per kW):</label>
+    <input type="number" id="au" placeholder="e.g. 100">
+
     <label for="ecRate">Tariff (₹/unit):</label>
     <input type="number" id="ecRate" step="0.01" placeholder="e.g. 6">
 
-    <label for="fcRate">Fixed Charge Rate :</label>
+    <label for="fcRate">Fixed Charge Rate:</label>
     <input type="number" id="fcRate" step="0.01" placeholder="e.g. 70">
 
     <label><input type="checkbox" id="isKVA"> FC is per kVA</label>
@@ -148,24 +151,23 @@
   <script>
     function calculateLS() {
       const load = parseFloat(document.getElementById('load').value);
+      const au = parseFloat(document.getElementById('au').value);
       const ecRate = parseFloat(document.getElementById('ecRate').value);
       const fcRate = parseFloat(document.getElementById('fcRate').value);
       const isKVA = document.getElementById('isKVA').checked;
 
-      const AU = 100;
-
-      if (isNaN(load) || isNaN(ecRate) || isNaN(fcRate)) {
+      if (isNaN(load) || isNaN(au) || isNaN(ecRate) || isNaN(fcRate)) {
         document.getElementById('result').innerHTML = "⚠️ Please fill all values correctly.";
         return;
       }
 
-      const ec = AU * load * ecRate;
+      const ec = au * load * ecRate;
       const fc = isKVA ? (load / 0.85) * fcRate : load * fcRate;
       const ls = 1.5 * (ec + fc);
 
       const breakdown = `
         <strong>Load:</strong> ${load.toFixed(2)} kW<br>
-        <strong>Assessed Units:</strong> ${AU} units/kW<br>
+        <strong>Assessed Units:</strong> ${au} units/kW<br>
         <strong>Energy Charge:</strong> ₹${ec.toFixed(2)}<br>
         <strong>Fixed Charge:</strong> ₹${fc.toFixed(2)}<br>
         <hr>
@@ -205,6 +207,7 @@
 
     function clearFields() {
       document.getElementById('load').value = "";
+      document.getElementById('au').value = "";
       document.getElementById('ecRate').value = "";
       document.getElementById('fcRate').value = "";
       document.getElementById('isKVA').checked = false;
